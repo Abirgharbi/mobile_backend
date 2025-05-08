@@ -1,0 +1,82 @@
+{
+  "name": "product_management_service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/index.ts",
+  "engines": {
+    "node": "18.x"
+  },
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+  ],
+  "scripts": {
+    "start": "nodemon --exec ts-node src/index.ts",
+    "build": "rimraf dist && npx tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
+    "test": "jest --watchAll"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "prettier --write . && pnpm format && pnpm lint"
+    }
+  },
+  "lint-staged": {
+    "*": "prettier --write"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.13",
+    "@types/express-serve-static-core": "^4.17.33",
+    "@types/morgan": "^1.9.4",
+    "@types/node": "^17.0.0",
+    "@vercel/node": "^2.9.13",
+    "body-parser": "^1.20.2",
+    "concurrently": "^7.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "http-status-codes": "^2.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "lint-staged": "^13.1.2",
+    "mongodb": "^5.1.0",
+    "mongoose": "^6.9.2",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.20",
+    "rimraf": "^3.0.2",
+    "simple-concat": "^1.0.1",
+    "ts-jest": "^29.1.0",
+    "typescript": "^4.8.3",
+    "vercel": "^28.17.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.5.0",
+    "@types/bson": "^4.2.0",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^18.14.6",
+    "@types/nodemailer": "^6.4.7",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "@typescript-eslint/parser": "^5.53.0",
+    "cookie-parser": "^1.4.6",
+    "eslint": "^8.34.0",
+    "husky": "^8.0.3",
+    "jest": "^29.5.0",
+    "nodemailer": "^6.9.1",
+    "pre-commit": "^1.2.2",
+    "prettier": "^2.8.4",
+    "rimraf": "^4.4.0",
+    "supertest": "^6.3.3",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.2"
+  }
+}
