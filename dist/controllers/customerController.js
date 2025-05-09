@@ -25,15 +25,17 @@ const getAllCustomers = async (req, res, next) => {
 };
 exports.getAllCustomers = getAllCustomers;
 const updateProfile = async (req, res, next) => {
-    let { email, name, image, phone } = req.body;
+    let { email, name, phone } = req.body;
+    // No image update logic here, only text fields are updated
     try {
+        // Assuming `req.params.id` contains the user ID
         await customerModel_1.Customer.findOneAndUpdate({ _id: req.params.id }, {
-            $set: { email, name, image, phone },
+            $set: { email, name, phone },
         });
-        return res.status(http_status_codes_1.StatusCodes.OK).send({ message: 'Profile updated successfully' });
+        return res.status(200).send({ message: 'Profile updated successfully' });
     }
     catch (err) {
-        next(new errorHandler_1.CustomError(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, 'Error updating Profile'));
+        next(new errorHandler_1.CustomError(500, 'Error updating Profile'));
     }
 };
 exports.updateProfile = updateProfile;

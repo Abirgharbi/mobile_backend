@@ -27,18 +27,22 @@ const getAllCustomers = async (req: Request, res: Response, next: NextFunction) 
 }
 
 const updateProfile = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    let { email, name, image, phone } = req.body;
+    let { email, name, phone } = req.body;
+    // No image update logic here, only text fields are updated
+
     try {
+        // Assuming `req.params.id` contains the user ID
         await Customer.findOneAndUpdate(
             { _id: req.params.id },
             {
-                $set: { email, name, image, phone },
-            });
-        return res.status(StatusCodes.OK).send({ message: 'Profile updated successfully' });
+                $set: { email, name, phone },
+            }
+        );
+        return res.status(200).send({ message: 'Profile updated successfully' });
     } catch (err) {
-        next(new CustomError(StatusCodes.INTERNAL_SERVER_ERROR, 'Error updating Profile'));
+        next(new CustomError(500, 'Error updating Profile'));
     }
-}
+};
 
 const deleteCustomer = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 

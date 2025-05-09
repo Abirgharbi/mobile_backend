@@ -21,7 +21,7 @@ export const customerSchema = new Schema<Customer>({
     email: { type: String, required: true, unique: true },
     verified: { type: Boolean, default: false },
     spend: { type: Number, required: false, default: 0 },
-    image: { type: String, default: 'https://res.cloudinary.com/dbkivxzek/image/upload/v1681248811/ARkea/s8mz71cwjnuxpq5tylyn.png' },
+    image: { type: String, default: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww' },
     addressId: { type: String, required: false },
     phone: { type: String, required: false },
 }, { timestamps: true });
