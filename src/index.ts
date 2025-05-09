@@ -6,7 +6,8 @@ import authRoute from "./routes/authRouter";
 import customerRoute from "./routes/customersRouter";
 import categoryRoute from "./routes/category";
 import productRoute from "./routes/product";
-
+//new
+import path = require('path');
 const app = express();
 
 app.use(express.json());
@@ -19,6 +20,9 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
+//new
+app.use('/uploads', express.static(path.join(__dirname,'..', 'uploads')));
+
 
 app.use(
   express.urlencoded({

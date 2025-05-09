@@ -2,8 +2,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { CustomError } from '../middleware/errorHandler';
-
-
 import dotenv from 'dotenv';
 import { ObjectId } from 'mongodb';
 import { Product } from '../models/product';
@@ -11,64 +9,124 @@ import { Category } from '../models/category';
 
 dotenv.config();
 
+//new
 const addProduct = async (req: Request, res: Response, next: NextFunction) => {
-
     try {
-        const {
-            name,
-            price,
-            compare_at_price,
-            description,
-            category,
-            images,
-            quantity,
-            thumbnail,
-            productCost,
-            model,
-            ratingsAverage,
-            ratingsCount,
-            colors,
-            discount
-        } = req.body;
-
-        const product = model
-            ? await Product.create({
-                name,
-                price,
-                compare_at_price,
-                description,
-                category,
-                quantity,
-                productCost,
-                model,
-                thumbnail,
-                ratingsAverage,
-                ratingsCount,
-                colors,
-                discount
-            })
-            : await Product.create({
-                name,
-                price,
-                compare_at_price,
-                description,
-                category,
-                images,
-                thumbnail,
-                productCost,
-                ratingsAverage,
-                ratingsCount,
-                quantity,
-                colors,
-                discount
-            });
-
-        return res.status(StatusCodes.OK).send(product);
+      const {
+        name,
+        price,
+        compare_at_price,
+        description,
+        category,
+        quantity,
+        productCost,
+        model,
+        ratingsAverage,
+        ratingsCount,
+        colors,
+        discount
+      } = req.body;
+  
+      // Vérifier si les champs requis sont présents
+      if (!name || !price || !compare_at_price || !description || !category || !quantity || !productCost) {
+        return res.status(400).json({ message: 'Missing required fields' });
+      }
+  
+      const files = req.files as {
+        [fieldname: string]: Express.Multer.File[];
+      };
+  
+      // Traiter les fichiers image et la miniature
+      const imagePaths = files['images']?.map(file => `/uploads/${file.filename}`) || [];
+      const thumbnailPath = files['thumbnail']?.[0]?.filename;
+  
+      // Vérifier si la miniature est présente
+      if (!thumbnailPath) {
+        return res.status(400).json({ message: 'Thumbnail is required.' });
+      }
+  
+      // Création du produit dans la base de données
+      const product = await Product.create({
+        name,
+        price,
+        compare_at_price,
+        description,
+        category,
+        quantity,
+        productCost,
+        model,
+        thumbnail: `/uploads/${thumbnailPath}`,
+        images: imagePaths,
+        ratingsAverage,
+        ratingsCount,
+        colors: colors ? JSON.parse(colors) : [], 
+        discount
+      });
+  
+      return res.status(StatusCodes.CREATED).send(product); 
     } catch (error) {
-
+        const err = error as Error;
+        console.error(err.message);
         return next(new CustomError(StatusCodes.INTERNAL_SERVER_ERROR, 'Something went wrong'));
-    }
-}
+      }
+  };
+// const addProduct = async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const {
+//             name,
+//             price,
+//             compare_at_price,
+//             description,
+//             category,
+//             images,
+//             quantity,
+//             thumbnail,
+//             productCost,
+//             model,
+//             ratingsAverage,
+//             ratingsCount,
+//             colors,
+//             discount
+//         } = req.body;
+
+//         const product = model
+//             ? await Product.create({
+//                 name,
+//                 price,
+//                 compare_at_price,
+//                 description,
+//                 category,
+//                 quantity,
+//                 productCost,
+//                 model,
+//                 thumbnail,
+//                 ratingsAverage,
+//                 ratingsCount,
+//                 colors,
+//                 discount
+//             })
+//             : await Product.create({
+//                 name,
+//                 price,
+//                 compare_at_price,
+//                 description,
+//                 category,
+//                 images,
+//                 thumbnail,
+//                 productCost,
+//                 ratingsAverage,
+//                 ratingsCount,
+//                 quantity,
+//                 colors,
+//                 discount
+//             });
+
+//         return res.status(StatusCodes.OK).send(product);
+//     } catch (error) {
+
+//         return next(new CustomError(StatusCodes.INTERNAL_SERVER_ERROR, 'Something went wrong'));
+//     }
+// }
 
 const updateProduct = async (req: Request, res: Response, next: NextFunction) => {
     try {
