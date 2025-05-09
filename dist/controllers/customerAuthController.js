@@ -82,7 +82,7 @@ const verifyMagicLink = async (req, res, next) => {
             }
             else {
                 await customerModel_1.Customer.findByIdAndUpdate(customer._id, { verified: true });
-                return res.json({ success: true });
+                return res.json({ success: true, token: (0, customerModel_1.generateAuthToken)(email, '30d'), customer });
             }
         }
     }

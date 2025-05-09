@@ -96,7 +96,7 @@ const verifyMagicLink = async (req: Request, res: Response, next: NextFunction) 
             } else {
                 await Customer.findByIdAndUpdate(customer._id, { verified: true });
 
-                return     res.json({ success: true });
+                return     res.json({ success: true ,token: generateAuthToken(email, '30d'), customer });
             }
         } 
     } catch (error) {
@@ -150,18 +150,5 @@ const OauthLogin = async (req: Request, res: Response, next: NextFunction) => {
 
 
 
-// crypto.subtle.generateKey(
-//     {
-//         name: "HMAC",
-//         hash: { name: "SHA-256" },
-//     },
-//     true,
-//     ["sign", "verify"]
-// )
-//     .then(function (key) {
-//         crypto.subtle.exportKey("jwk", key).then(exported => {
-//             console.log(exported);
-//         });
-//     })
 
 export { login, verifyMagicLink, register, OauthRegister, OauthLogin };

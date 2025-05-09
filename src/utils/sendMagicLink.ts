@@ -85,7 +85,8 @@ export const sendMagicLink = async (email: string, link: string, message: string
             </head>
             <body>
               <div class="container">
-              <img class="logo" src="../images/logo_KOA" alt="Your Logo">
+              <img class="logo" src="https://drive.google.com/uc?export=view&id=19k1oLdIqlx52SmKoer3kVLjVzXGVGigf" alt="Your Logo">
+
             
                 <h2 style="color: #ff7742;">KOAHome Email Confirmation</h2>
             
@@ -94,7 +95,6 @@ export const sendMagicLink = async (email: string, link: string, message: string
                 <p>Thank you for signing up for KOAHome! Before we can fully activate your account, we need to verify your email address. Please click the following link within the next hour to confirm your email address and complete the registration process:</p>
             
                                                 <p><a class="button" style='color:white' href="http://KOA/verify${link}">Click here to verify your account  </a></p>
-                                                // <p><a class="button" style='color:white' href="http://KOA/home">Click here to verify your home address</a></p>
 
             
                 <p>If you are unable to click the link, please copy and paste it into your browser's address bar.</p>
