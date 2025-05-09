@@ -6,6 +6,9 @@ import authRoute from "./routes/authRouter";
 import customerRoute from "./routes/customersRouter";
 import categoryRoute from "./routes/category";
 import productRoute from "./routes/product";
+import reviewRoutes from './routes/review';
+
+
 import path from 'path';
 
 const app = express();
@@ -25,6 +28,9 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
+//new
+app.use('/uploads', express.static(path.join(__dirname,'..', 'uploads')));
+
 
 app.use(
   express.urlencoded({
@@ -37,6 +43,7 @@ app.use("/user", authRoute); // auth route
 app.use("/user/customer", customerRoute);
 app.use("/product/category", categoryRoute);
 app.use("/product", productRoute);
+app.use('/review', reviewRoutes);
 
 app.listen(4002, () =>
   console.log(`server running on port : ${process.env.PORT} \n`)
