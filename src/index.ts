@@ -6,8 +6,11 @@ import authRoute from "./routes/authRouter";
 import customerRoute from "./routes/customersRouter";
 import categoryRoute from "./routes/category";
 import productRoute from "./routes/product";
-//new
-import path = require('path');
+import reviewRoutes from './routes/review';
+
+
+import path from 'path';
+
 const app = express();
 
 app.use(express.json());
@@ -41,18 +44,15 @@ app.use(
   })
 );
 
-
 // routes
 app.use("/user", authRoute); // auth route
 app.use("/user/customer", customerRoute);
 app.use("/product/category", categoryRoute);
-app.use("/product", productRoute); 
-
-
+app.use("/product", productRoute);
+app.use('/review', reviewRoutes);
 
 app.listen(4002, () =>
   console.log(`server running on port : ${process.env.PORT} \n`)
 );
-
 
 export default app;

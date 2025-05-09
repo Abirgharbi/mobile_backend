@@ -11,8 +11,8 @@ const authRouter_1 = __importDefault(require("./routes/authRouter"));
 const customersRouter_1 = __importDefault(require("./routes/customersRouter"));
 const category_1 = __importDefault(require("./routes/category"));
 const product_1 = __importDefault(require("./routes/product"));
-//new
-const path = require("path");
+const review_1 = __importDefault(require("./routes/review"));
+const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 const allowedOrigins = [
@@ -38,7 +38,7 @@ app.use((0, cors_1.default)({
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 //new
-app.use('/uploads', express_1.default.static(path.join(__dirname, '..', 'uploads')));
+app.use('/uploads', express_1.default.static(path_1.default.join(__dirname, '..', 'uploads')));
 app.use(express_1.default.urlencoded({
     extended: true,
 }));
@@ -47,5 +47,6 @@ app.use("/user", authRouter_1.default); // auth route
 app.use("/user/customer", customersRouter_1.default);
 app.use("/product/category", category_1.default);
 app.use("/product", product_1.default);
+app.use('/review', review_1.default);
 app.listen(4002, () => console.log(`server running on port : ${process.env.PORT} \n`));
 exports.default = app;
