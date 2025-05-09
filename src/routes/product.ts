@@ -1,11 +1,21 @@
 import { Router } from 'express';
 import { protectAuth } from '../middleware/protectAuth';
-
+import { upload } from '../middleware/uploads';
 import { addProduct, updateProduct, deleteProduct, getProducts, getProductById, getFiltredProducts, getRecentProducts, getPopularProducts, getProductsByCategory, getBestSellingProducts, getDiscountedProducts, checkProductsInStock, updateProductRating, updateProductAfterSelling,getTotalMoneyEarned ,updateProductStatus,calculateTotalRevenue} from '../controllers/product';
 
 const productRoute = Router();
 
-productRoute.post('/add', addProduct);
+//new
+productRoute.post(
+    '/add-product',
+    upload.fields([
+      { name: 'images', maxCount: 5 },
+      { name: 'thumbnail', maxCount: 1 }
+    ]),
+    addProduct
+  );
+
+//productRoute.post('/add', addProduct);
 productRoute.put('/update/:id', protectAuth, updateProduct);
 productRoute.delete('/delete/:id', protectAuth, deleteProduct);
 productRoute.get('/get', getProducts);
