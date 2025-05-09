@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const customerAuthController_1 = require("../controllers/customerAuthController");
+const authRoute = (0, express_1.Router)();
+authRoute.post('/login', customerAuthController_1.login);
+authRoute.post('/register', customerAuthController_1.register);
+authRoute.post('/oauth/register', customerAuthController_1.OauthRegister);
+authRoute.post('/oauth/login', customerAuthController_1.OauthLogin);
+authRoute.get('/verifyMagicLink', customerAuthController_1.verifyMagicLink);
+exports.default = authRoute;

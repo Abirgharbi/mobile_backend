@@ -1,39 +1,38 @@
-import { createTransport } from 'nodemailer';
-import dotenv from 'dotenv/config';
-
-console.log(dotenv);
-
-
-const transporter = createTransport({
-  service: 'gmail',
-  port: 465,
-  host: "smtp.gmail.com",
-  secure: true,
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASSWORD,
-  },
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sendMagicLink = void 0;
+const nodemailer_1 = require("nodemailer");
+const config_1 = __importDefault(require("dotenv/config"));
+console.log(config_1.default);
+const transporter = (0, nodemailer_1.createTransport)({
+    service: 'gmail',
+    port: 465,
+    host: "smtp.gmail.com",
+    secure: true,
+    auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASSWORD,
+    },
 });
-
-
 new Promise((resolve, reject) => {
-  transporter.verify(function (error, success) {
-    if (error) {
-      reject(error);
-    } else {
-      resolve(success);
-    }
-  });
+    transporter.verify(function (error, success) {
+        if (error) {
+            reject(error);
+        }
+        else {
+            resolve(success);
+        }
+    });
 });
-
-export const sendMagicLink = async (email: string, link: string, message: string) => await new Promise((resolve, reject) => {
-  // send mail
-  transporter.sendMail(
-    {
-      to: email,
-      subject: "Verify your email address for KOA Home",
-  
-      html: `
+const sendMagicLink = async (email, link, message) => await new Promise((resolve, reject) => {
+    // send mail
+    transporter.sendMail({
+        to: email,
+        subject: "Verify your email address for KOA Home",
+        html: `
             <!DOCTYPE html>
             <html>
             <head>
@@ -111,15 +110,15 @@ export const sendMagicLink = async (email: string, link: string, message: string
             </html>
             
                         `,
-    },
-    (err, info) => {
-      if (err) {
-        console.error(err);
-        reject(err);
-      } else {
-        console.log(info);
-        resolve(info);
-      }
-    }
-  );
+    }, (err, info) => {
+        if (err) {
+            console.error(err);
+            reject(err);
+        }
+        else {
+            console.log(info);
+            resolve(info);
+        }
+    });
 });
+exports.sendMagicLink = sendMagicLink;

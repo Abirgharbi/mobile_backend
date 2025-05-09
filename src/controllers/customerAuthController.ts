@@ -26,9 +26,9 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
             });
         }
 
-        const magicToken = generateAuthToken(email, '1h');
-        const link = `user/verifyMagicLink?token=${magicToken}`;
-        await sendMagicLink(email, link, "Click the link below to sign in");
+       const magicToken = generateAuthToken(email, '1h');
+       const link = `?token=${magicToken}`;
+       await sendMagicLink(email, link, "Click the link below to sign in");
 
         const token = generateAuthToken(email, '30d');
 
@@ -46,10 +46,9 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
         console.log("abirrr")
 
         let { email, name } = req.body;
-
         const magicToken = generateAuthToken(email, '1h');
         const exist = await Customer.findOne({ email });
-        const link = `user/verifyMagicLink?token=${magicToken}`;
+        const link = `?token=${magicToken}`;
 
         if (!exist) {
             await sendMagicLink(email, link, "Your account has been created. click the link below to confirm your email");
@@ -97,7 +96,7 @@ const verifyMagicLink = async (req: Request, res: Response, next: NextFunction) 
             } else {
                 await Customer.findByIdAndUpdate(customer._id, { verified: true });
 
-                return res.redirect(`myApp://KOA.com/landing`);
+                return     res.json({ success: true });
             }
         } 
     } catch (error) {

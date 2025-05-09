@@ -11,13 +11,24 @@ import path = require('path');
 const app = express();
 
 app.use(express.json());
-
-app.use(
-  cors({
-    origin: ["http://localhost:5173", "https://arkea-dashboard.vercel.app", "https://main.d20ufs6pozcpwc.amplifyapp.com"],
-    credentials: true,
-  })
-);
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:59714",
+   "http://localhost:5000",
+  "https://arkea-dashboard.vercel.app",
+  "https://main.d20ufs6pozcpwc.amplifyapp.com",
+];
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // autorise les requêtes sans origine (ex: Postman)
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS policy: Origin not allowed"));
+    }
+  },
+  credentials: true,
+}));
 app.use(cookieParser());
 app.use(express.json());
 //new
