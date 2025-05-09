@@ -1,0 +1,12 @@
+[
+    {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.example.projet_ecommerce_meuble", 
+        "sha256_cert_fingerprints": [
+          "D1:5D:90:0F:AE:EC:60:A6:76:C5:15:02:79:5E:7D:20:03:34:46:46:5D:50:16:3A:73:12:AF:1B:62:FA:65:F7"  
+        ]
+      }
+    }
+  ]
