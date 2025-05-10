@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calculateTotalRevenue = exports.updateProductStatus = exports.getTotalMoneyEarned = exports.updateProductAfterSelling = exports.updateProductRating = exports.checkProductsInStock = exports.getDiscountedProducts = exports.getBestSellingProducts = exports.getProductsByCategory = exports.getPopularProducts = exports.getRecentProducts = exports.getFiltredProducts = exports.getProductById = exports.getProducts = exports.deleteProduct = exports.updateProduct = exports.addProduct = void 0;
+exports.updateProductRating = exports.checkProductsInStock = exports.getDiscountedProducts = exports.getBestSellingProducts = exports.getProductsByCategory = exports.getPopularProducts = exports.getRecentProducts = exports.getFiltredProducts = exports.getProductById = exports.getProducts = exports.addProduct = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const errorHandler_1 = require("../middleware/errorHandler");
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -52,94 +52,6 @@ const addProduct = async (req, res, next) => {
     }
 };
 exports.addProduct = addProduct;
-// const addProduct = async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const {
-//             name,
-//             price,
-//             compare_at_price,
-//             description,
-//             category,
-//             images,
-//             quantity,
-//             thumbnail,
-//             productCost,
-//             model,
-//             ratingsAverage,
-//             ratingsCount,
-//             colors,
-//             discount
-//         } = req.body;
-//         const product = model
-//             ? await Product.create({
-//                 name,
-//                 price,
-//                 compare_at_price,
-//                 description,
-//                 category,
-//                 quantity,
-//                 productCost,
-//                 model,
-//                 thumbnail,
-//                 ratingsAverage,
-//                 ratingsCount,
-//                 colors,
-//                 discount
-//             })
-//             : await Product.create({
-//                 name,
-//                 price,
-//                 compare_at_price,
-//                 description,
-//                 category,
-//                 images,
-//                 thumbnail,
-//                 productCost,
-//                 ratingsAverage,
-//                 ratingsCount,
-//                 quantity,
-//                 colors,
-//                 discount
-//             });
-//         return res.status(StatusCodes.OK).send(product);
-//     } catch (error) {
-//         return next(new CustomError(StatusCodes.INTERNAL_SERVER_ERROR, 'Something went wrong'));
-//     }
-// }
-const updateProduct = async (req, res, next) => {
-    try {
-        const { name, price, compare_at_price, description, category, images, quantity, thumbnail, productCost, ratingsAverage, ratingsCount, colors } = req.body;
-        const product = await product_1.Product.findByIdAndUpdate(req.params.id, {
-            name,
-            price,
-            compare_at_price,
-            description,
-            category,
-            images,
-            quantity,
-            thumbnail,
-            productCost,
-            ratingsAverage,
-            ratingsCount,
-            colors
-        }, { new: true });
-        return res.status(http_status_codes_1.StatusCodes.OK).send(product);
-    }
-    catch (error) {
-        return next(new errorHandler_1.CustomError(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, 'Something went wrong'));
-    }
-};
-exports.updateProduct = updateProduct;
-const deleteProduct = async (req, res, next) => {
-    try {
-        const product = await product_1.Product.findByIdAndDelete(req.params.id);
-        return res.status(http_status_codes_1.StatusCodes.OK).send(product);
-    }
-    catch (error) {
-        return next(new errorHandler_1.CustomError(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, 'Something went wrong'));
-    }
-};
-exports.deleteProduct = deleteProduct;
 const getRecentProducts = async (req, res, next) => {
     try {
         var perPage = 6;
@@ -298,66 +210,3 @@ const updateProductRating = async (req, res, next) => {
     }
 };
 exports.updateProductRating = updateProductRating;
-const updateProductAfterSelling = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const { quantity } = req.body;
-        const product = await product_1.Product.findById(id);
-        if (!product) {
-            return next(new errorHandler_1.CustomError(http_status_codes_1.StatusCodes.NOT_FOUND, 'Product not found'));
-        }
-        const newQuantity = product.quantity - quantity;
-        const revenue = product.totalRevenue + ((product.price - product.productCost) * quantity);
-        const updatedProduct = await product_1.Product.updateOne({ _id: product._id }, { quantity: newQuantity, totalRevenue: revenue }, { new: true });
-        res.status(http_status_codes_1.StatusCodes.OK).json({ message: 'Product updated successfully', updatedProduct });
-    }
-    catch (error) {
-        return next(new errorHandler_1.CustomError(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, 'Something went wrong'));
-    }
-};
-exports.updateProductAfterSelling = updateProductAfterSelling;
-const getTotalMoneyEarned = async (req, res, next) => {
-    try {
-        const products = await product_1.Product.find();
-        const totalMoneyEarned = products.reduce((acc, product) => {
-            return acc + product.totalRevenue;
-        }, 0);
-        return res.status(http_status_codes_1.StatusCodes.OK).send({ totalMoneyEarned });
-    }
-    catch (error) {
-        return next(new errorHandler_1.CustomError(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, 'Something went wrong'));
-    }
-};
-exports.getTotalMoneyEarned = getTotalMoneyEarned;
-const updateProductStatus = async (req, res, next) => {
-    try {
-        const product = await product_1.Product.findById(req.params.id);
-        if (!product) {
-            return res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({ message: 'Product not found' });
-        }
-        const updatedProduct = await product_1.Product.updateOne({ _id: product._id }, { status: !product.status }, { new: true });
-        return res.status(http_status_codes_1.StatusCodes.OK).json({ updatedProduct });
-    }
-    catch (error) {
-        return next(new errorHandler_1.CustomError(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, 'Something went wrong'));
-    }
-};
-exports.updateProductStatus = updateProductStatus;
-const calculateTotalRevenue = async (req, res, next) => {
-    try {
-        const result = await product_1.Product.aggregate([
-            {
-                $group: {
-                    _id: null,
-                    totalRevenue: { $sum: "$totalRevenue" }
-                }
-            }
-        ]);
-        const totalRevenue = result.length > 0 ? result[0].totalRevenue : 0;
-        return res.status(http_status_codes_1.StatusCodes.OK).send({ totalRevenue });
-    }
-    catch (error) {
-        console.error("Error calculating total revenue:", error);
-    }
-};
-exports.calculateTotalRevenue = calculateTotalRevenue;
